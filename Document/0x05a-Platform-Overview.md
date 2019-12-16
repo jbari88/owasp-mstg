@@ -1,24 +1,24 @@
-## Android Platform Overview
+## 안드로이드 플랫폼 개요 Android Platform Overview
 
-This section introduces the Android platform from an architecture point of view. The following five key areas are discussed:
+이 장에서는 설계 관점에서 안드로이드 플랫폼을 소개합니다. 아래 다섯 가지 핵심 영역에 대해 논의하려고 합니다.: This section introduces the Android platform from an architecture point of view. The following five key areas are discussed:
 
-1. Android security architecture
-2. Android application structure
-3. Inter-process Communication (IPC)
-4. Android application publishing
-5. Android application attack surface
+1. 안드로이드 보안 설계 Android security architecture
+2. 안드로이드 애플리케이션 구조 Android application structure
+3. 내부 프로세스 간 통신 Inter-process Communication (IPC)
+4. 안드로이드 애플리케이션 배포 Android application publishing
+5. 안드로이드 애플리케이션 공격 포인트 (?) Android application attack surface
 
-Visit the official [Android developer documentation website](https://developer.android.com/index.html "Android Developer Guide") for more details about the Android platform.
+안드로이드 플랫폼에 관해 더 상세한 정보를 원한다면 공식 [안드로이드 개발자 문저 웹사이트](https://developer.android.com/index.html "Android Developer Guide")를 방문해보세요. Visit the official [Android developer documentation website](https://developer.android.com/index.html "Android Developer Guide") for more details about the Android platform.
 
-### Android Security Architecture
+### 안드로이드 보안 설계 Android Security Architecture
 
-Android is a Linux-based open source platform developed by Google, which serves as a mobile operating system (OS). Today the platform is the foundation for a wide variety of modern technology, such as mobile phones, tablets, wearable tech, TVs, and other "smart" devices. Typical Android builds ship with a range of pre-installed ("stock") apps and support installation of third-party apps through the Google Play store and other marketplaces.
+안드로이드는 구글이 개발한 리룩스 기반의 오픈 소스 플렛폼으로 모바일 OS로 사용됩니다. 오늘날 이 플랫폼은 휴대폰, 태블릿, 웨어러블 기기, TV, 그리고 다른 "스마트" 기기와 같은 다양한 현대 기술의 기반으로 사용되고 있습니다. 일반적으로 안드로이드 빌드는 미리 설치된("선탑재") 애플리케이션과 함께 제굉되고 구글 플레이 스토어와 다른 마켓플레이스에서 받을 수 있는 다른 앱의 설치를 지원하고 있습니다. Android is a Linux-based open source platform developed by Google, which serves as a mobile operating system (OS). Today the platform is the foundation for a wide variety of modern technology, such as mobile phones, tablets, wearable tech, TVs, and other "smart" devices. Typical Android builds ship with a range of pre-installed ("stock") apps and support installation of third-party apps through the Google Play store and other marketplaces.
 
-Android's software stack is composed of several different layers. Each layer defines interfaces and offers specific services.
+안드로이드 소프트웨어 스택은 몇가지 다른 레이어로 구성되어 있습니다. 각각의 레이어는 인터페이스를 정의하고 고유의 서비스를 제공합니다. Android's software stack is composed of several different layers. Each layer defines interfaces and offers specific services.
 
 <img src="Images/Chapters/0x05a/android_software_stack.png" alt="Android Software Stack" width="400">
 
-At the lowest level, Android is based on a variation of the Linux Kernel. On top of the kernel, the Hardware Abstraction Layer (HAL) defines a standard interface for interacting with built-in hardware components. Several HAL implementations are packaged into shared library modules that the Android system calls when required. This is the basis for allowing applications to interact with the device's hardware—for example, it allows a stock phone application to use a device's microphone and speaker.
+가장 낮은 단계에서 안드로이드는 변형된 리룩스 커널 위에서 동작합니다. 커널 위에서는 내장된 하드웨어 컴포넌트와 상호작용할 수 있는 표준 인터페이스인 하드웨어 추상화 레이어(HAL)가 있습니다. 몇 가지 HAL 인터페이스 구현체는 공유 라이드러리 모듈에 패키징되어 안드로이드 시스템이 필요할 때 호출할 수 있습니다. 이런 방식으로 애플리케이션은 단말기 하드웨어를 사용할 수 있습니다.- 예를 들어, 선탑재 휴대폰 애플리케이션이 디바이스의 마이크와 스피커를 사용할 수 있습니다.  At the lowest level, Android is based on a variation of the Linux Kernel. On top of the kernel, the Hardware Abstraction Layer (HAL) defines a standard interface for interacting with built-in hardware components. Several HAL implementations are packaged into shared library modules that the Android system calls when required. This is the basis for allowing applications to interact with the device's hardware—for example, it allows a stock phone application to use a device's microphone and speaker.
 
 Android apps are usually written in Java and compiled to Dalvik bytecode, which is somewhat different from the traditional Java bytecode. Dalvik bytecode is created by first compiling the Java code to .class files, then converting the JVM bytecode to the Dalvik .dex format with the `dx` tool.
 
