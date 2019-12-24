@@ -30,9 +30,9 @@
 
 안드로이드 앱은 하드웨어 자원에 직접 접근할 수 없고 각각의 샌드박스 위에서 동작합니다. 이러한 방식은 명확하게 리소스와 앱을 통제할 수 있도록 합니다.: 가령 크래싱된 앱은 같은 단말기 위에서 동작하는 다른 앱에 영향을 줄 수 없습니다. 동시에, 안드로이드 런타임은 앱에 할단되는 시스템 자원의 최대 수를 통제해서 특정 앱이 너무 많은 자원을 독점할 수 없도록 방지할 수 있습니다. Android apps don't have direct access to hardware resources, and each app runs in its own sandbox. This allows precise control over resources and apps: for instance, a crashing app doesn't affect other apps running on the device. At the same time, the Android runtime controls the maximum number of system resources allocated to apps, preventing any one app from monopolizing too many resources.
 
-#### Android Users and Groups
+#### 안드로이드 사용자와 그룹 Android Users and Groups
 
-Even though the Android operating system is based on Linux, it doesn't implement user accounts in the same way other Unix-like systems do. In Android, the multi-user support of the Linux kernel to sandbox apps: with a few exceptions, each app runs as though under a separate Linux user, effectively isolated from other apps and the rest of the operating system.
+안드로이드 운영 시스템이 리눅스에 기반하지만 유닉스 계열의 시스템과 동일한 방식으로 사용자 계정을 실행하지 않는다. 안드로이드의 경우, 다중 사용자가 리눅스 커널이 앱을 샌드박스 형태로 동작할 수 있도록 지원한다.: 몇 가지 예외 상황을 제외하고는 각 앱은 분리된 리눅스 사용자 아래서 다른 앱 또는 다른 운영 시스템에 완벽하게 독립된 환경에서 동작한다.  Even though the Android operating system is based on Linux, it doesn't implement user accounts in the same way other Unix-like systems do. In Android, the multi-user support of the Linux kernel to sandbox apps: with a few exceptions, each app runs as though under a separate Linux user, effectively isolated from other apps and the rest of the operating system.
 
 The file [system/core/include/private/android_filesystem_config.h](http://androidxref.com/7.1.1_r6/xref/system/core/include/private/android_filesystem_config.h "android_filesystem_config.h") includes a list of the predefined users and groups system processes are assigned to. UIDs (userIDs) for other applications are added as the latter are installed. For more details, check out Bin Chen's [blog post](https://pierrchen.blogspot.mk/2016/09/an-walk-through-of-android-uidgid-based.html "Bin Chen - AProgrammer Blog - Android Security: An Overview Of Application Sandbox") on Android sandboxing.
 
