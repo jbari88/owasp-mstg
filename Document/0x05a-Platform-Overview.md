@@ -34,9 +34,9 @@
 
 안드로이드 운영 시스템이 리눅스에 기반하지만 유닉스 계열의 시스템과 동일한 방식으로 사용자 계정을 실행하지 않는다. 안드로이드의 경우, 다중 사용자가 리눅스 커널이 앱을 샌드박스 형태로 동작할 수 있도록 지원한다.: 몇 가지 예외 상황을 제외하고는 각 앱은 분리된 리눅스 사용자 아래서 다른 앱 또는 다른 운영 시스템에 완벽하게 독립된 환경에서 동작한다.  Even though the Android operating system is based on Linux, it doesn't implement user accounts in the same way other Unix-like systems do. In Android, the multi-user support of the Linux kernel to sandbox apps: with a few exceptions, each app runs as though under a separate Linux user, effectively isolated from other apps and the rest of the operating system.
 
-The file [system/core/include/private/android_filesystem_config.h](http://androidxref.com/7.1.1_r6/xref/system/core/include/private/android_filesystem_config.h "android_filesystem_config.h") includes a list of the predefined users and groups system processes are assigned to. UIDs (userIDs) for other applications are added as the latter are installed. For more details, check out Bin Chen's [blog post](https://pierrchen.blogspot.mk/2016/09/an-walk-through-of-android-uidgid-based.html "Bin Chen - AProgrammer Blog - Android Security: An Overview Of Application Sandbox") on Android sandboxing.
+[system/core/include/private/android_filesystem_config.h](http://androidxref.com/7.1.1_r6/xref/system/core/include/private/android_filesystem_config.h "android_filesystem_config.h") 파일에서 미리 정의해 시스템 프로세스가 할당해둔 사용자와 그룹 목록을 확인할 수 있다. 다른 앱의 UID(userId)는 나중에 설치된 이후에 추가된다. 더 자세한 내용은 안드로이드 샌드박스에 대해 기술한 Bin Chen의 [블로그 포스트](https://pierrchen.blogspot.mk/2016/09/an-walk-through-of-android-uidgid-based.html "Bin Chen - AProgrammer Blog - Android Security: An Overview Of Application Sandbox")를 확인하기 바란다. The file [system/core/include/private/android_filesystem_config.h](http://androidxref.com/7.1.1_r6/xref/system/core/include/private/android_filesystem_config.h "android_filesystem_config.h") includes a list of the predefined users and groups system processes are assigned to. UIDs (userIDs) for other applications are added as the latter are installed. For more details, check out Bin Chen's [blog post](https://pierrchen.blogspot.mk/2016/09/an-walk-through-of-android-uidgid-based.html "Bin Chen - AProgrammer Blog - Android Security: An Overview Of Application Sandbox") on Android sandboxing.
 
-For example, Android 7.0 (API level 24) defines the following system users:
+예를 들어, 안드로이드 7.0 (API level 24) 는 아래 시스템 사용자를 정의하고 있다. For example, Android 7.0 (API level 24) defines the following system users:
 
 ```c
     #define AID_ROOT             0  /* traditional unix root user */
@@ -51,21 +51,21 @@ For example, Android 7.0 (API level 24) defines the following system users:
 <br/>
 <br/>
 
-#### Android Device Encryption
+#### 안드로이드 단말기 암호화 Android Device Encryption
 
-Android supports device encryption from Android 2.3.4 (API level 10) and it has undergone some big changes since then. Google imposed that all devices running Android 6.0 (API level 23) or higher had to support storage encryption. Although some low-end devices were exempt because it would significantly impact performance. In the following sections you can find information about device encryption and its algorithms.
+안드로이드에서는 안드로이드 2.3.4(API 레벨 10)부터 단말기 암호화를 지원하고 있으며 큰 변화를 겪어왔다. 구글은 안드로이드 6.0(API 레벨 23) 이상을 지원하는 모든 단말기는 스토리지 암호화를 지원하도록 강제하고 있다. 일부 저성능 단말기는 성능에 영향을 미칠 수 있기 때문에 면제되었습니다. 다음 섹션에서 단말기 암호화와 알고리즘에 대한 정보를 다루겠습니다. Android supports device encryption from Android 2.3.4 (API level 10) and it has undergone some big changes since then. Google imposed that all devices running Android 6.0 (API level 23) or higher had to support storage encryption. Although some low-end devices were exempt because it would significantly impact performance. In the following sections you can find information about device encryption and its algorithms.
 
-##### Full-Disk Encryption
+##### 전체 디스크 암호화 Full-Disk Encryption
 
-Android 5.0 (API level 21) and above support full-disk encryption. This encryption uses a single key protected by the users' device password to encrypt and decrypt the userdata partition. This kind of encryption is now considered deprecated and file-based encryption should be used whenever possible. Full-disk encryption has drawbacks, such as not being able to receive calls or not having operative alarms after a reboot if the user does not enter his password.
+안드로이드 5.0(API 레벨 21) 이상은 전체 디스크 암호화를 지원합니다. 이 암호화는 사용자 영역 데이터 영역을 암/복호화할 때 사용자 단말기 비밀번호로 보호되는 단 하나의 키를 사용합니다. 이런 종류의 암호화는 더 이상 사용되지 않는 것을 권고하고 있고 가능한 한 파일 기반 암호화를 사용해야 합니다. 전체 디스크 암호화는 재시작 이후에 사용자가 비밀번호를 입력하지 않으면 전화를 받을 수 없고 알람이 울리지 않는 단점이 있습니다. Android 5.0 (API level 21) and above support full-disk encryption. This encryption uses a single key protected by the users' device password to encrypt and decrypt the userdata partition. This kind of encryption is now considered deprecated and file-based encryption should be used whenever possible. Full-disk encryption has drawbacks, such as not being able to receive calls or not having operative alarms after a reboot if the user does not enter his password.
 
-##### File-Based Encryption
+##### 파일 기반 암호화 File-Based Encryption
 
-Android 7.0 (API level 24) supports file-based encryption. File-based encryption allows different files to be encrypted with different keys so they can be deciphered independently. Devices which support this type of encryption support Direct Boot as well. Direct Boot enables the device to have access to features such as alarms or accessibility services even if the user does not enter his password.
+안드로이드 7.0 (API 레벨 24)는 파일 기반 암호화를 지원합니다. 파일 기반 암호화는 다른 키를 이용해 서로 다른 파일을 암호화하기 때문에 독립적으로 복호화할 수 있습니다. 이 암호화를 지원하는 단말기는 직접 부팅 모드 또한 지원합니다. 직접 부팅 모드는 사용자가 비밀번호를 입력하지 않더라도 알람이나 서비스에 접근 가능하도록 해줍니다. Android 7.0 (API level 24) supports file-based encryption. File-based encryption allows different files to be encrypted with different keys so they can be deciphered independently. Devices which support this type of encryption support Direct Boot as well. Direct Boot enables the device to have access to features such as alarms or accessibility services even if the user does not enter his password.
 
-##### Adiantum
+##### 디스크 암호화를 위한 알고리즘 Adiantum
 
-AES is used on most modern Android devices for storage encryption. Actually, AES has become such a widely used algorithm that the most recent processor implementations have a dedicated set of instructions to provide hardware accelerated encryption and decryption operations, such as ARMv8 with its Cryptography Extensions or x86 with AES-NI extension.
+AES는 스토리지 암호화를 위해 최신 안드로이드 단말기에서 사용하고 있습니다. 사실, AES는 AES is used on most modern Android devices for storage encryption. 실제로 AES는 가장 널리 사용되는 알고리즘으로, 최신 프로세서 구현에는 암호화 가속 기능이 있는 ARMv8 또는 AES-NI, 확장 기능이 있는 x86과 같은 하드웨어 가속 암호화 및 암호 해독 작업을 제공하는 전용 명령 세트가 있습니다. Actually, AES has become such a widely used algorithm that the most recent processor implementations have a dedicated set of instructions to provide hardware accelerated encryption and decryption operations, such as ARMv8 with its Cryptography Extensions or x86 with AES-NI extension.
 However, not all devices are capable of using AES for storage encryption in a timely fashion. Especially low-end devices running Android Go. These devices usually use low-end processors, such as the ARM Cortex-A7 which don't have hardware accelerated AES.
 
 Adiantum is a cipher construction designed by Paul Crowley and Eric Biggers at Google to fill the gap for that set of devices which are not able to run AES at least at 50 MiB/s. Adiantum relies only on additions, rotations and XORs; these operations are natively supported on all processors. Therefore, the low-end processors can encrypt 4 times faster and decrypt 5 times faster than they would if they were using AES.
