@@ -65,19 +65,21 @@
 
 ##### 디스크 암호화를 위한 알고리즘 Adiantum
 
-AES는 스토리지 암호화를 위해 최신 안드로이드 단말기에서 사용하고 있습니다. 사실, AES는 AES is used on most modern Android devices for storage encryption. 실제로 AES는 가장 널리 사용되는 알고리즘으로, 최신 프로세서 구현에는 암호화 가속 기능이 있는 ARMv8 또는 AES-NI, 확장 기능이 있는 x86과 같은 하드웨어 가속 암호화 및 암호 해독 작업을 제공하는 전용 명령 세트가 있습니다. Actually, AES has become such a widely used algorithm that the most recent processor implementations have a dedicated set of instructions to provide hardware accelerated encryption and decryption operations, such as ARMv8 with its Cryptography Extensions or x86 with AES-NI extension.
+AES는 스토리지 암호화를 위해 최신 안드로이드 단말기에서 사용하고 있습니다. 사실, AES는 AES is used on most modern Android devices for storage encryption. 실제로 AES는 가장 널리 사용되는 알고리즘으로, 최신 프로세서 구현에는 암호화 가속 기능이 있는 ARMv8 또는 AES-NI, 확장 기능이 있는 x86과 같은 하드웨어 가속 암호화 및 암호 해독 작업을 제공하는 전용 명령 세트가 있습니다. 하지만 모든 단말기가 발빠르게 스토리지 암호화에 AES를 사용할 수 있는 것은 아닙니다. 특히 안드로이드 고를 실행시키는 저가형 단말기가 그렇죠. 이러한 장치는 일반적으로 하드웨어 가속 AES가없는 ARM Cortex-A7과 같은 저가형 프로세서를 사용합니다.  Actually, AES has become such a widely used algorithm that the most recent processor implementations have a dedicated set of instructions to provide hardware accelerated encryption and decryption operations, such as ARMv8 with its Cryptography Extensions or x86 with AES-NI extension.
 However, not all devices are capable of using AES for storage encryption in a timely fashion. Especially low-end devices running Android Go. These devices usually use low-end processors, such as the ARM Cortex-A7 which don't have hardware accelerated AES.
 
+Aduantum은 구글의 Paul Crowley와 Eric Biggers가 최소 50 MiB/s에서 AES 실행할 수 없는 단말기의 간극을 좁히기 위해 디자인한 암호화 구조입니다. Adiantum은 덧셈, 회전, XOR에만 의존합니ㅣ다; 이러한 연산은 모든 프로세서가 기본적으로 지원하고 있습니다. 따라서 저가형 프로세서도 AES를 사용하는 것보다 4배 빠르게 암호화하고 5배 빠르게 복호화할 수 있습니다.
 Adiantum is a cipher construction designed by Paul Crowley and Eric Biggers at Google to fill the gap for that set of devices which are not able to run AES at least at 50 MiB/s. Adiantum relies only on additions, rotations and XORs; these operations are natively supported on all processors. Therefore, the low-end processors can encrypt 4 times faster and decrypt 5 times faster than they would if they were using AES.
 
+Adiantum은 다른 암호의 구성입니다:
 Adiantum is a composition of other ciphers:
 
-- NH: A hashing function.
-- Poly1305: A message authentication code (MAC).
-- XChaCha12: A stream cipher.
+- NH : 해싱 함수 NH: A hashing function.
+- Poly1305: 메세지 인증코드 A message authentication code (MAC).
+- XChaCha12: 스트림 암호 A stream cipher.
 - AES-256: A single invocation of AES.
 
-Adiantum is a new cipher but it is secure, as long as ChaCha12 and AES-256 are considered secure. Its designers didn't create any new cryptographic primitive, instead they relied on other well-known and thoroughly studied primitives to create a new performant algorithm.
+Adiantum은 새로운 암호 방식이지만, ChaCha12와 AES-256이 안전한 이상 안전한 알고리즘입니다. Adiantum is a new cipher but it is secure, as long as ChaCha12 and AES-256 are considered secure. Its designers didn't create any new cryptographic primitive, instead they relied on other well-known and thoroughly studied primitives to create a new performant algorithm.
 
 Adiantum is available for Android 9 (API level 28) and higher versions. It is natively supported in Linux kernel 5.0 and onwards, while kernel 4.19, 4.14 & 4.9 need patching.
 Android does not provide an API to application developers to use Adiantum; this cipher is to be taken into account and implemented by ROM developers or device vendors, which want to provide full disk encryption without sacrificing performance on low-end devices. At the moment of writing there is no public cryptographic library that implements this cipher to use it on Android applications.
