@@ -79,44 +79,45 @@ Adiantum is a composition of other ciphers:
 - XChaCha12: 스트림 암호 A stream cipher.
 - AES-256: A single invocation of AES.
 
-Adiantum은 새로운 암호 방식이지만, ChaCha12와 AES-256이 안전한 이상 안전한 알고리즘입니다. Adiantum is a new cipher but it is secure, as long as ChaCha12 and AES-256 are considered secure. Its designers didn't create any new cryptographic primitive, instead they relied on other well-known and thoroughly studied primitives to create a new performant algorithm.
+Adiantum은 새로운 암호 방식이지만, ChaCha12와 AES-256이 안전한 이상 안전한 알고리즘입니다. Adiantum은 완전히 새로운 암호화 방식이 아니라 잘 알려진 기존 암호화 방식을 이용하고 연구해 새롭고 효율적인 알고리즘을 재탄생시켰습니다. Adiantum is a new cipher but it is secure, as long as ChaCha12 and AES-256 are considered secure. Its designers didn't create any new cryptographic primitive, instead they relied on other well-known and thoroughly studied primitives to create a new performant algorithm.
 
-Adiantum is available for Android 9 (API level 28) and higher versions. It is natively supported in Linux kernel 5.0 and onwards, while kernel 4.19, 4.14 & 4.9 need patching.
+Adiantum은 안드로이드 8(API 레벨 28) 이상부터 사용이 가능합니다. 기본적으로 리눅스 커널 5.0 이상부터 지원하기 때문에 커널 4.19, 4.14와 4.9는 패치가 필요합니다. 안드로이드는 Adiantum을 사용할 수 있는 API를 앱 개발자들에게 제공하고 있지 않습니다; 이 암호방식은 저가형 단말기에서도 성능에 문제 없이 전체 디스크 암호화를 지원할 수 있도록 ROM 개발자나 단말기 벤더사를 고려해 만들어졌기 때문입니다. 이 글이 작성되는 현재까지 안드로이드 애플리케이션에서 이 암호화 방식을 사용할 수 있는 공개된 암호화 라이브러리는 없습니다. AES 명령 세트가있는 장치에서 AES가 더 빠르게 실행됩니다. 이 경우 Adiantum을 사용하지 않는 것이 좋습니다.  Adiantum is available for Android 9 (API level 28) and higher versions. It is natively supported in Linux kernel 5.0 and onwards, while kernel 4.19, 4.14 & 4.9 need patching.
 Android does not provide an API to application developers to use Adiantum; this cipher is to be taken into account and implemented by ROM developers or device vendors, which want to provide full disk encryption without sacrificing performance on low-end devices. At the moment of writing there is no public cryptographic library that implements this cipher to use it on Android applications.
 It should be noted that AES runs faster on devices having the AES instruction set. In that case the use of Adiantum is highly discouraged.
 
-### Apps on Android
+### 안드로이드 앱 Apps on Android
 
-#### Communication with the Operating System
+#### 운영시스템과 통신방법 Communication with the Operating System
 
-Android apps interact with system services via the Android Framework, an abstraction layer that offers high-level Java APIs. The majority of these services are invoked via normal Java method calls and are translated to IPC calls to system services that are running in the background. Examples of system services include:
+안드로이드 앱은 Java API를 제공하는 추상 레이어인 안드로이드 프레임워크를 통해 시스템 서비스와 상호작용합니다. 대부분의 이러한 서비스들은 일반적인 자바 메소드 호출에 의해 실행되고 백그라운드에서 실행되는 시스템 서비스에 대한 IPC 호출로 변환됩니다. 시스템 서비스의 예시는 아래와 같습니다. : Android apps interact with system services via the Android Framework, an abstraction layer that offers high-level Java APIs. 대부ㅂThe majority of these services are invoked via normal Java method calls and are translated to IPC calls to system services that are running in the background. Examples of system services include:
 
-- Connectivity (Wi-Fi, Bluetooth, NFC, etc.)
-- Files
-- Cameras
-- Geolocation (GPS)
-- Microphone
 
-The framework also offers common security functions, such as cryptography.
+- 연결 (Wi-Fi, 블루투스, NFC 등) Connectivity (Wi-Fi, Bluetooth, NFC, etc.)
+- 파일 Files
+- 카메라 Cameras
+- 위치(GPS) Geolocation (GPS)
+- 마이크 Microphone
 
-The API specifications change with every new Android release. Critical bug fixes and security patches are usually applied to earlier versions as well. The oldest Android version supported at the time of writing is Android 7.0 (API level 24-25) and the current Android version is Android 9 (API level 28).
+프레임워크는 암호화와 같은 보안 기능도 제공합니다. The framework also offers common security functions, such as cryptography.
 
-Noteworthy API versions:
+API 명세들은 새로운 안드로이드가 발표될 때마다 변경됩니다. 심각한 버그는 수정되고 전 버전의 보안 패치도 이루어집니다. 이 글이 쓰여지는 시점에 가장 오래된 안드로이드 버전은 안드로이드 7.0(API 레벨 24-25) 이고 현재 버전은 안드로이드 9(API 레벨 28) 입니다. The API specifications change with every new Android release. Critical bug fixes and security patches are usually applied to earlier versions as well. The oldest Android version supported at the time of writing is Android 7.0 (API level 24-25) and the current Android version is Android 9 (API level 28).
 
-- Android 4.2 (API level 16) in November 2012 (introduction of SELinux)
-- Android 4.3 (API level 18) in July 2013 (SELinux became enabled by default)
-- Android 4.4 (API level 19) in October 2013 (several new APIs and ART introduced)
-- Android 5.0 (API level 21) in November 2014 (ART used by default and many other features added)
-- Android 6.0 (API level 23) in October 2015 (many new features and improvements, including granting; detailed permissions setup at run time rather than all or nothing during installation)
-- Android 7.0 (API level 24-25) in August 2016 (new JIT compiler on ART)
-- Android 8.0 (API level 26-27) in August 2017 (A lot of security improvements)
-- Android 9 (API level 28) in August 2018.
+알아두면 좋은 API 버전들 : Noteworthy API versions:
 
-#### Linux UID/GID for Normal Applications
+- 안드로이드 4.2(API 레벨 16) 2012년 11월 (SELinux가 소개됨) Android 4.2 (API level 16) in November 2012 (introduction of SELinux)
+- 안드로이드 4.3(API 레벨 18) 2013년 7월 (SELinux가 기본이 됨) Android 4.3 (API level 18) in July 2013 (SELinux became enabled by default)
+- 안드로이드 4.4(API 레벨 19) 2013년 10월 (몇가지 새로운 API 추가, ART 소개됨) Android 4.4 (API level 19) in October 2013 (several new APIs and ART introduced)
+- 안드로이드 5.0(API 레벨 21) 2014년 11월 (ART가 기본으로 사용되고 많은 다른 특성이 추가됨) Android 5.0 (API level 21) in November 2014 (ART used by default and many other features added)
+- 안드로이드 6.0(API 레벨 23) 2015년 10월 (많은 특징 개선, 앱 설치 시 모든 권한 허가가 없어지고 실행 시 권한 설정 기능)Android 6.0 (API level 23) in October 2015 (many new features and improvements, including granting; detailed permissions setup at run time rather than all or nothing during installation)
+- 안드로이드 7.0(API 레벨 24-25) 2016년 8월 (ART의 새로운 JIT 컴파일러) Android 7.0 (API level 24-25) in August 2016 (new JIT compiler on ART)
+- 안드로이드 8.0(API 레벨 26-27) 2017년 8월 (많은 보안 개선) Android 8.0 (API level 26-27) in August 2017 (A lot of security improvements)
+- 안드로이드 9 (API 레벨 28) 2018년 10월 Android 9 (API level 28) in August 2018.
 
-Android leverages Linux user management to isolate apps. This approach is different from user management usage in traditional Linux environments, where multiple apps are often run by the same user. Android creates a unique UID for each Android app and runs the app in a separate process. Consequently, each app can access its own resources only. This protection is enforced by the Linux kernel.
+#### 일반 앱의 리눅스 UID/GID Linux UID/GID for Normal Applications
 
-Generally, apps are assigned UIDs in the range of 10000 and 99999. Android apps receive a user name based on their UID. For example, the app with UID 10188 receives the user name `u0_a188`. If the permissions an app requested are granted, the corresponding group ID is added to the app's process. For example, the user ID of the app below is 10188. It belongs to the group ID 3003 (inet). That group is related to android.permission.INTERNET permission. The output of the `id` command is shown below.
+안드로이드는 앱을 분리시키기 위해 리눅스의 사용자 관리 방식을 채택했습니다. 이런 방식은 전통적인 리눅스 환경의 사용자 관리 방식인 동일 사용자가 여러 앱을 실행하는 것과 다릅니다. 안드로이드는 각각의 안드로이드 앱을 위해 유일한 UID를 만들고 각 프로세스에서 앱을 실행시킵니다. 결과적으로 각각의 앱은 자신의 자원에만 접근할 수 있습니다. 이 보호는 리눅스 커널에서 실행됩니다. Android leverages Linux user management to isolate apps. This approach is different from user management usage in traditional Linux environments, where multiple apps are often run by the same user. Android creates a unique UID for each Android app and runs the app in a separate process. Consequently, each app can access its own resources only. This protection is enforced by the Linux kernel.
+
+일반적으로 앱에는 10000에서 99999 범위의 UID가 할당됩니다. 안드로이드 앱은 UID에 기반해 사용자 이름을 받습니다. 예를 들어, UID 10188로 할당된다면 사용자명은 `u0_a188`이 됩니다. 만약 앱에서 요청한 권한을 사용자가 허가하면, 관련된 그룹 ID가 앱의 프로세스에 추가됩니다. 예를 들어 아래 앱의 사용자 ID는 10188이고 그룹 ID 3003(inet) 입니다. 이 그룹은 android.permission.INTERNET 권한과 관련있습니다. 아래는 `id` 명령어의 결과입니다. Generally, apps are assigned UIDs in the range of 10000 and 99999. Android apps receive a user name based on their UID. For example, the app with UID 10188 receives the user name `u0_a188`. If the permissions an app requested are granted, the corresponding group ID is added to the app's process. For example, the user ID of the app below is 10188. It belongs to the group ID 3003 (inet). That group is related to android.permission.INTERNET permission. The output of the `id` command is shown below.
 
 ```shell
 $ id
@@ -124,7 +125,7 @@ uid=10188(u0_a188) gid=10188(u0_a188) groups=10188(u0_a188),3003(inet),
 9997(everybody),50188(all_a188) context=u:r:untrusted_app:s0:c512,c768
 ```
 
-The relationship between group IDs and permissions is defined in the file [frameworks/base/data/etc/platform.xml](http://androidxref.com/7.1.1_r6/xref/frameworks/base/data/etc/platform.xml "platform.xml")
+그룹 ID와 권한 간 관계는 [frameworks/base/data/etc/platform.xml](http://androidxref.com/7.1.1_r6/xref/frameworks/base/data/etc/platform.xml "platform.xml")에 정의되어 있습니다. The relationship between group IDs and permissions is defined in the file [frameworks/base/data/etc/platform.xml](http://androidxref.com/7.1.1_r6/xref/frameworks/base/data/etc/platform.xml "platform.xml")
 
 ```xml
 <permission name="android.permission.INTERNET" >
