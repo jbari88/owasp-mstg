@@ -144,20 +144,20 @@ uid=10188(u0_a188) gid=10188(u0_a188) groups=10188(u0_a188),3003(inet),
 
 #### 앱 샌드박스 The App Sandbox
 
-앱은 안드로이드 애플리케이션 샌드박스 안에서 실행됩니다  Apps are executed in the Android Application Sandbox, which separates the app data and code execution from other apps on the device. This separation adds a layer of security.
+앱은 안드로이드 애플리케이션 샌드박스 안에서 실행됩니다. 안드로이드 샌드박스는 앱 데이터와 코드 실행을 단말기 내 다른 앱과 분리시킵니다. 이로써 보안을 한 단계 강화할 수 있습니다.  Apps are executed in the Android Application Sandbox, which separates the app data and code execution from other apps on the device. This separation adds a layer of security.
 
-Installation of a new app creates a new directory named after the app package, which results in the following path: `/data/data/[package-name]`. This directory holds the app's data. Linux directory permissions are set such that the directory can be read from and written to only with the app's unique UID.
+새로운 앱을 설치하면 앱 패키지 이름을 따온 새로운 디렉토리가 `/data/data/[package-name]` 경로에 만들어집니다. 이 디렉토리에 앱 데이터가 저장됩니다. 앱의 UID 권한만 디렉토리를 읽고 쓸 수 있는 리눅스 디렉토리 권한이 설정됩니다. Installation of a new app creates a new directory named after the app package, which results in the following path: `/data/data/[package-name]`. This directory holds the app's data. Linux directory permissions are set such that the directory can be read from and written to only with the app's unique UID.
 
 <img src="Images/Chapters/0x05a/Selection_003.png" alt="Sandbox" width="400">
 
-We can confirm this by looking at the file system permissions in the `/data/data` folder. For example, we can see that Google Chrome and Calendar are assigned one directory each and run under different user accounts:
+`/data/data` 폴더에 파일 시스템 권한을 살펴보면 확인할 수 있습니다. 예를 들어 구글 크롬과 캘린더에 각각 디렉토리가 할당되고 다른 사용자 계정으로 권한이 설정되는 것을 알 수 있습니다. We can confirm this by looking at the file system permissions in the `/data/data` folder. For example, we can see that Google Chrome and Calendar are assigned one directory each and run under different user accounts:
 
 ```shell
 drwx------  4 u0_a97              u0_a97              4096 2017-01-18 14:27 com.android.calendar
 drwx------  6 u0_a120             u0_a120             4096 2017-01-19 12:54 com.android.chrome
 ```
 
-Developers who want their apps to share a common sandbox can sidestep sandboxing . When two apps are signed with the same certificate and explicitly share the same user ID (having the _sharedUserId_ in their _AndroidManifest.xml_ files), each can access the other's data directory. See the following example to achieve this in the NFC app:
+앱 간 공통된 샌드박스를 공유하는 앱을 만들고 싶은 경우 샌드박스를 피할 수 있습니다. 두 앱이 동일한 인증서로 사이닝되고 명확하게 동일한 사용자 ID를 공유(_AndroidManifest.xml_ 파일에서 _sharedUserId_ 를 선언)하면 다른 앱의 데이터 디렉토리에 접근이 가능합니다. 아래는 NFC 앱에서 이 방식을 사용하는 예시입니다. Developers who want their apps to share a common sandbox can sidestep sandboxing . When two apps are signed with the same certificate and explicitly share the same user ID (having the _sharedUserId_ in their _AndroidManifest.xml_ files), each can access the other's data directory. See the following example to achieve this in the NFC app:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -167,11 +167,11 @@ Developers who want their apps to share a common sandbox can sidestep sandboxing
 
 ##### Zygote
 
-The process `Zygote` starts up during [Android initialization](https://github.com/dogriffiths/HeadFirstAndroid/wiki/How-Android-Apps-are-Built-and-Run "How Android Apps are run"). Zygote is a system service for launching apps. The Zygote process is a "base" process that contains all the core libraries the app needs. Upon launch, Zygote opens the socket `/dev/socket/zygote` and listens for connections from local clients. When it receives a connection, it forks a new process, which then loads and executes the app-specific code.
+`Zygote` 프로세스는 [안드로이드 초기화](https://github.com/dogriffiths/HeadFirstAndroid/wiki/How-Android-Apps-are-Built-and-Run "How Android Apps are run") 중에 시작됩니다. Zygote는 앱을 동작시키기 위한 시스템 서비스입니다. Zygote는 앱 실행에 필요한 주요 라이브러리를 모두 포한한 기본 프로세스입니다. 앱이 실행되는 동안 Zygote는 `/dev/socket/zygote` 소켓을 열고 로컬 클라이언트와 연결을 기다립니다. 연결이 이루어지면 새로울 프로세스를 fork(복사)하고 앱별 코드를 실행하고 로드합니다.  The process `Zygote` starts up during [Android initialization](https://github.com/dogriffiths/HeadFirstAndroid/wiki/How-Android-Apps-are-Built-and-Run "How Android Apps are run"). Zygote is a system service for launching apps. The Zygote process is a "base" process that contains all the core libraries the app needs. Upon launch, Zygote opens the socket `/dev/socket/zygote` and listens for connections from local clients. When it receives a connection, it forks a new process, which then loads and executes the app-specific code.
 
-##### App Lifeycle
+##### 앱 생명주기 App Lifeycle
 
-In Android, the lifetime of an app process is controlled by the operating system. A new Linux process is created when an app component is started and the same app doesn’t yet have any other components running. Android may kill this process when the latter is no longer necessary or when reclaiming memory is necessary to run more important apps. The decision to kill a process is primarily related to the state of the user's interaction with the process. In general, processes can be in one of four states.
+안드로이드에서 앱 프로세스의 수명은 운영 시스템이 결정할 수 있습니다. 앱의 컴포넌트가 처음 시작되고 아직 그 앱의 컴포넌트가 실행된 적이 없다면 새로운 리눅스 프로세스가 생성됩니다. 안드로이드는  더 이상 필요하지 않거나 더 중요한 앱을 동작시키기 위해서 메모리 회수가 필요할 때 이 프로세스를 종료할 수도 있습니다. 프로세스 종료 걸정은 프로세스와 사용자 간 상호작용 상태와 관련있습니다. 일반적으로 프로세스는 4가지 상태중 하나일 수 있습니다.  In Android, the lifetime of an app process is controlled by the operating system. A new Linux process is created when an app component is started and the same app doesn’t yet have any other components running. Android may kill this process when the latter is no longer necessary or when reclaiming memory is necessary to run more important apps. The decision to kill a process is primarily related to the state of the user's interaction with the process. In general, processes can be in one of four states.
 
 - A foreground process (e.g., an activity running at the top of the screen or a running BroadcastReceive)
 - A visible process is a process that the user is aware of, so killing it would have a noticeable negative impact on user experience. One example is running an activity that's visible to the user on-screen but not in the foreground.
