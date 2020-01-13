@@ -260,20 +260,20 @@ APK 파일에 모듈을 추가한 상태와 추가하지 않은 상태 모두 �
 
 이러한 모든 요소는 API를 통해 사용 가능한 사전 정의 된 클래스 형식으로 Android 운영 체제에서 제공됩니다.All these elements are provided by the Android operating system, in the form of predefined classes available through APIs.
 
-##### Activities
+##### 액티비티 Activities
 
-Activities make up the visible part of any app. There is one activity per screen, so an app with three different screens implements three different activities. Activities are declared by extending the Activity class. They contain all user interface elements: fragments, views, and layouts.
+액티비티는 앱의 보이는 부분을 구성합ㄴ니다. 스크린 당 액티비티 하나가 구성하기 대문에 3개의 다른 스크린으로 구성된 앱이라면 역시 3개의 다른 액티비티로 구성되어 있는 것입니다. 액티비티는 Activity 클래스를 상속받아 정의할 수 있습니다. 액티비티는 fragment, view, layout 등 모든 사용자 인터페이스를 포함합니다. Activities make up the visible part of any app. There is one activity per screen, so an app with three different screens implements three different activities. Activities are declared by extending the Activity class. They contain all user interface elements: fragments, views, and layouts.
 
-Each activity needs to be declared in the Android Manifest with the following syntax:
+각 액티비티는 아래와 같이 안드로이드 매니페스트 파일에 정의되어야 합니다. Each activity needs to be declared in the Android Manifest with the following syntax:
 
 ```xml
 <activity android:name="ActivityName">
 </activity>
 ```
 
-Activities not declared in the manifest can't be displayed, and attempting to launch them will raise an exception.
+매니패스트 파일에 정의하지 않은 액티비티는 화면에 보여질 수 없고 강제로 실행시키면 에러가 발생합니다. Activities not declared in the manifest can't be displayed, and attempting to launch them will raise an exception.
 
-Like apps, activities have their own life cycle and need to monitor system changes to handle them. Activities can be in the following states: active, paused, stopped, and inactive. These states are managed by the Android operating system. Accordingly, activities can implement the following event managers:
+앱과 마찬가지로 액티비티는 생명주기를 가지고 있고, 이를 다루기 위해 시스템의 변경사항을 모니터링 해야 합니다. 액태비티는 다음과 같은 상태에 잇을 수 있습니다.: 활성화, 일시정지, 멈춤, 비활성화. 이 상태는 안드로이드 운영 시스템이 관리를 합니다. 따라서 액티비티는 아래의 이벤트 매니저를 실행할 수 있습니다.Like apps, activities have their own life cycle and need to monitor system changes to handle them. Activities can be in the following states: active, paused, stopped, and inactive. These states are managed by the Android operating system. Accordingly, activities can implement the following event managers:
 
 - onCreate
 - onSaveInstanceState
@@ -285,7 +285,7 @@ Like apps, activities have their own life cycle and need to monitor system chang
 - onRestart
 - onDestroy
 
-An app may not explicitly implement all event managers, in which case default actions are taken. Typically, at least the `onCreate` manager is overridden by the app developers. This is how most user interface components are declared and initialized. `onDestroy` may be overridden when resources (like network connections or connections to databases) must be explicitly released or specific actions must occur when the app shuts down.
+앱은 모든 이벤트 매니저를 명시적으로 실행할 순 없습니다. 이 경우에는 기본 동작이 실행됩니다. 일반적으로 최소 `onCreate` 매니저는 앱 개발자가 재정의됩니다. 대부분의 사용자 인터페이스 구성요소는 정의되고 초기화됩니다. `onDestro`는 네트워크 연결 또는 데이터베이스 연결 등과 같은 리소스가 명시적으로 배포되거나 앱이 종료될 때 특정 액션이 이루어져야 할 때 재정의됩니다. An app may not explicitly implement all event managers, in which case default actions are taken. Typically, at least the `onCreate` manager is overridden by the app developers. This is how most user interface components are declared and initialized. `onDestroy` may be overridden when resources (like network connections or connections to databases) must be explicitly released or specific actions must occur when the app shuts down.
 
 ##### Fragments
 
